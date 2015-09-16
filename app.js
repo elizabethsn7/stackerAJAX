@@ -6,15 +6,6 @@ $(document).ready(function() {
     var tags = $(this).find("input[name='tags']").val();
     getUnanswered(tags);
 
-
-    $('.inspiration-getter').submit(function(event) {
-    // zero out results if previous search has run
-    $('.results').html('');
-    // get the value of the tags the user submitted
-    var answerers = $(this).find("input[name='answerers']").val();
-    getInspiration(tags);
-
-    });
   });
 
 
@@ -22,7 +13,7 @@ $(document).ready(function() {
   // this function takes the question object returned by StackOverflow 
   // and creates new result to be appended to DOM
   var showQuestion = function(question) {
-
+    console.log(question)
     // clone our result template code
     var result = $('.templates .question').clone();
 
@@ -108,7 +99,7 @@ $(document).ready(function() {
   var getAnswerers = function(answerers) {
 
     var request = {
-      site: 'stackerOverflow',
+      site: 'stackeroverflow',
       order: 'desc',
       sort: 'creation'
     };
@@ -125,9 +116,20 @@ $(document).ready(function() {
 
       });
   };
+
 //ISPIRATION - TOP ANSWERERS
   // takes a string of semi-colon separated tags to be searched
   // for on StackOverflow
+
+    $('.inspiration-getter').submit(function(event) {
+    // zero out results if previous search has run
+    $('.results').html('');
+    // get the value of the tags the user submitted
+    var answerers = $(this).find("input[name='answerers']").val();
+    getInspiration(answerers);
+
+    });
+
   var getInspiration = function(tags) {
 
     // the parameters we need to pass in our request to StackOverflow's API
@@ -139,7 +141,7 @@ $(document).ready(function() {
     };
 
     var result = $.ajax({
-        url: "http://api.stackexchange.com/docs/top-answerers-on-tags#period=month&filter=default&site=stackoverflow",
+        url: "http://api.stackexchange.com/2.2/tags/" + tags + "/top-answerers/all_time",
         data: request,
         dataType: "jsonp",
         type: "GET",
